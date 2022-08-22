@@ -24,10 +24,11 @@ public class AdminController {
         model.addAttribute("user", userService.allUsers());
         model.addAttribute("admin", userService.findUserByName(principal.getName()));
         model.addAttribute("roles", userService.listRoles());
+        model.addAttribute("newUser", new User());
         return "/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
