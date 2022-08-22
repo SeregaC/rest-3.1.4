@@ -23,6 +23,7 @@ public class AdminController {
     public String userList(Model model, Principal principal) {
         model.addAttribute("user", userService.allUsers());
         model.addAttribute("admin", userService.findUserByName(principal.getName()));
+        model.addAttribute("roles", userService.listRoles());
         return "/admin";
     }
 
@@ -52,13 +53,15 @@ public class AdminController {
     public String updateUser(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", userService.findUserById(id));
         model.addAttribute("roles", userService.listRoles());
-        return "/update";
+       return "/update";
 
     }
 
     @PostMapping("/{id}")
-    public String update(@ModelAttribute("user") User user) {
+    public String update(@PathVariable int id, @ModelAttribute("user") User user) {
         userService.updateUser(user);
         return "redirect:/admin";
     }
+
+
 }

@@ -34,4 +34,5 @@ public class UserController {
         model.addAttribute("user", userService.findUserById(id));
         return "/user";
     }
+
 }

@@ -82,4 +82,8 @@ public class User implements UserDetails {
         return name;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

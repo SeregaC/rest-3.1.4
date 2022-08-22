@@ -10,8 +10,10 @@ import ru.kata.spring.boot_security.demo.Model.User;
 import ru.kata.spring.boot_security.demo.Repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.Repositories.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -75,15 +77,18 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+
     @Override
     @Transactional
-    public void updateUser(User user) {
+    public void  updateUser(User user) {
         User userFromDb = userRepository.getById(user.getId());
         if (!userFromDb.getPassword().equals(user.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
         userRepository.save(user);
     }
+
+
 
     @Override
     @Transactional
@@ -101,5 +106,6 @@ public class UserServiceImpl implements UserService {
     public List<Role> listRoles() {
         return roleRepository.findAll();
     }
+
 
 }
