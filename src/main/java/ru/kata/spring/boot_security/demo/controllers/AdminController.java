@@ -1,10 +1,10 @@
-package ru.kata.spring.boot_security.demo.Controllers;
+package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.Model.User;
-import ru.kata.spring.boot_security.demo.Service.UserService;
+import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 
@@ -50,19 +50,11 @@ public class AdminController {
     }
 
 
-    @GetMapping("/{id}/update")
-    public String updateUser(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userService.findUserById(id));
-        model.addAttribute("roles", userService.listRoles());
-       return "/update";
 
-    }
-
-    @PostMapping("/{id}")
-    public String update(@PathVariable int id, @ModelAttribute("user") User user) {
+    @PostMapping("/update/{id}")
+    public String updateUser(@ModelAttribute("user") User user, @RequestParam(value = "role") String role) {
+        user.setRoles(userService.findRolesByName(role));
         userService.updateUser(user);
         return "redirect:/admin";
     }
-
-
 }

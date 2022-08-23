@@ -1,14 +1,14 @@
-package ru.kata.spring.boot_security.demo.Service;
+package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.Model.Role;
-import ru.kata.spring.boot_security.demo.Model.User;
-import ru.kata.spring.boot_security.demo.Repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.Repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.model.Role;
+import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,11 +33,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findUserByName(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = findUserByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("Пользователь с именем '%s' не найден", username));
+            throw new UsernameNotFoundException(String.format("Пользователь с именем '%s' не найден", email));
         }
 
         return user;
@@ -53,9 +53,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User findUserByName(String userName) {
-
         return userRepository.findByName(userName);
     }
+   @Override
+   @Transactional
+   public User findUserByEmail (String email){
+        return userRepository.findByEmail(email);
+   }
+
 
     @Override
     @Transactional
@@ -66,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean saveUser(User user) {
-        User userFromDB = userRepository.findByName(user.getUsername());
+        User userFromDB = userRepository.findByEmail(user.getEmail());
 
         if (userFromDB != null) {
             return false;
@@ -88,8 +93,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
-
     @Override
     @Transactional
     public boolean deleteUser(Long userId) {
@@ -107,5 +110,14 @@ public class UserServiceImpl implements UserService {
         return roleRepository.findAll();
     }
 
-
+    @Override
+    public Set<Role> findRolesByName(String roleName) {
+        Set<Role> roles = new HashSet<>();
+        for (Role role : listRoles()) {
+            if (roleName.contains(role.getName())) {
+                roles.add(role);
+            }
+        }
+        return roles;
+    }
 }
