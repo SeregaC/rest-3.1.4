@@ -32,16 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = findUserByEmail(email);
-
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("Пользователь с именем '%s' не найден", email));
-        }
-
-        return user;
-    }
 
     @Override
     @Transactional
